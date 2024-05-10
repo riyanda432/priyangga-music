@@ -3,7 +3,7 @@ export const notify = (toast, title, status, description) => {
       title,
       status,
       description,
-      duration: 1000,
+      duration: 3000,
       position: "top",
       isClosable: true,
     });
