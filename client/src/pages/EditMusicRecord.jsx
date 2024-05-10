@@ -21,8 +21,6 @@ const EditMusicRecord = () => {
   const navigate = useNavigate();
   const { token } = useSelector((store) => store.AuthReducer);
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (musicName && artistName) {

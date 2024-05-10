@@ -8,6 +8,8 @@ import {
   signupSuccess,
 } from "../redux/auth/action";
 import { useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css'
 import {
   Flex,
   Box,
@@ -21,6 +23,7 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  Textarea,
 } from "@chakra-ui/react";
 import { notify } from "../utils/extraFunction";
 
@@ -35,13 +38,17 @@ function Signup() {
     setUser({ ...user, [name]: value });
   };
 
+  const handlePhoneChange = (value, country) => {
+    const countryCode = country.dialCode || '';
+    setUser({ ...user, phone: `${countryCode}${value}` });
+  };
+
   const handleSignup = (e) => {
     e.preventDefault();
     dispatch(signupRequest());
     axios
       .post(`/signup`, user)
       .then((res) => {
-        // console.log(res.data);
         if (res.data) {
           dispatch(signupSuccess(res.data));
           notify(toast, res.data.message, "success");
@@ -89,6 +96,32 @@ function Signup() {
                   placeholder="Enter Full Name"
                 />
               </FormControl>
+              <FormControl className="name">
+                <FormLabel>Nickname</FormLabel>
+                <Input
+                  type="text"
+                  name="nickname"
+                  onChange={handleChange}
+                  placeholder="Enter Nickname"
+                />
+              </FormControl>
+              <FormControl className="phone">
+                <FormLabel>Phone Number</FormLabel>
+                <PhoneInput
+                    name="phone_number"
+                    country={"id"}
+                    placeholder="Enter Phone Number"
+                    onChange={handlePhoneChange}
+                />
+              </FormControl>
+              <FormControl className="name">
+                <FormLabel>Home Address</FormLabel>
+                <Textarea
+                  name="home_address"
+                  onChange={handleChange}
+                  placeholder="Enter Home Address"
+                />
+              </FormControl>
               <FormControl className="email">
                 <FormLabel>Email address</FormLabel>
                 <Input
@@ -100,7 +133,6 @@ function Signup() {
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                
                 <Input
                   type="password"
                   name="password"

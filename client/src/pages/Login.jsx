@@ -26,7 +26,6 @@ function Login() {
   const dispatch = useDispatch();
   const location = useLocation();
   const toast = useToast();
-  // console.log(location);
   const comingFrom = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
@@ -83,7 +82,7 @@ function Login() {
           >
             <Stack spacing={4}>
               <FormControl className="email">
-                <FormLabel>Email ad1dress</FormLabel>
+                <FormLabel>Email Address</FormLabel>
                 <Input
                   type="email"
                   name="email"
