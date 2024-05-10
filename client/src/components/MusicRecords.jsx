@@ -10,8 +10,8 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteMusicRecords, getMusicRecords } from "../redux/app/action";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "./Loading";

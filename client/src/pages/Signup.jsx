@@ -7,7 +7,7 @@ import {
   signupRequest,
   signupSuccess,
 } from "../redux/auth/action";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Flex,
   Box,

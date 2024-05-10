@@ -1,5 +1,4 @@
 import axios from "axios";
-import { loadData } from "../../utils/accessLocal";
 import { notify } from "../../utils/extraFunction";
 import {
   GET_MUSIC_RECORDS_REQUEST,
