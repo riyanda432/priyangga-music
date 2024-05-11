@@ -1,9 +1,9 @@
 const express = require("express");
 const cors =require("cors");
 
-const { albumRouter } = require("./routes/album.route.js");
-const { userRouter } = require("./routes/user.route.js");
-const { connection } = require("./config/db.js");
+const { albumRouter } = require("../routes/album.route.js");
+const { userRouter } = require("../routes/user.route.js");
+const { connection } = require("../config/db.js");
 const port = process.env.PORT || 8080;
 const app = express();
 app.use(express.json());

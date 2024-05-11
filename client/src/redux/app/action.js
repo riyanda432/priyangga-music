@@ -65,14 +65,20 @@ const deleteMusicFailure = (payload) => {
 
 export const getMusicRecords = (params, token, toast) => (dispatch) => {
   dispatch(getMusicRequest());
-  return axios
-    .get(`/api/v1/albums`, params)
+  return axios({
+    method: "get",
+    url: `/api/v1/albums`,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    params
+  })
     .then((res) => {
       dispatch(getMusicSuccess(res.data));
-      // notify(toast, "Album Fetched successfully", "success");
+      notify(toast, "Album Fetched successfully", "success");
     })
     .catch((err) => {
-      // console.log(err.response.data.message);
       dispatch(getMusicFailure(err));
       notify(toast, err.response.data.message, "error");
     });
@@ -90,7 +96,6 @@ export const addMusicRecords = (payload, token, toast) => (dispatch) => {
     },
   })
     .then((res) => {
-      // console.log(res.data);
       dispatch(addMusicSuccess(res.data));
       notify(toast, "Album added successfully", "success");
     })

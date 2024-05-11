@@ -13,7 +13,6 @@ const Allroutes = () => {
       {" "}
       <Routes>
         <Route path="/" element={<Home />} />
-
         <Route
           path="/albums/:id/edit"
           element={

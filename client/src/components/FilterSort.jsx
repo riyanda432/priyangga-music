@@ -15,7 +15,7 @@ const FilterSort = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialGenreParams = searchParams.getAll("genre");
+  const initialGenreParams = "";
   const initialSortParams = searchParams.get("sortBy");
 
   const [category, setCategory] = useState(initialGenreParams || []);
@@ -25,6 +25,7 @@ const FilterSort = () => {
     const option = e.target.value;
     let newCategory = [...category];
     if (category.includes(option)) {
+      console.log("option", option);
       newCategory.splice(newCategory.indexOf(option), 1);
     } else {
       newCategory.push(option);
