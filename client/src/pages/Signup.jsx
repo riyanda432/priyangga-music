@@ -47,7 +47,7 @@ function Signup() {
     e.preventDefault();
     dispatch(signupRequest());
     axios
-      .post(`/signup`, user)
+      .post(`/api/v1/users/signup`, user)
       .then((res) => {
         if (res.data) {
           dispatch(signupSuccess(res.data));

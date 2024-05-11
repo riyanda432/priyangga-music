@@ -66,7 +66,7 @@ const deleteMusicFailure = (payload) => {
 export const getMusicRecords = (params, token, toast) => (dispatch) => {
   dispatch(getMusicRequest());
   return axios
-    .get(`/albums`, params)
+    .get(`/api/v1/albums`, params)
     .then((res) => {
       dispatch(getMusicSuccess(res.data));
       // notify(toast, "Album Fetched successfully", "success");
@@ -82,7 +82,7 @@ export const addMusicRecords = (payload, token, toast) => (dispatch) => {
   dispatch(addMusicRequest());
   return axios({
     method: "post",
-    url: `/albums/create`,
+    url: `/api/v1/albums/create`,
     data: payload,
     headers: {
       "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export const updateMusicRecords = (id, payload, token, toast) => (dispatch) => {
   dispatch(updateMusicRequest);
   return axios({
     method: "patch",
-    url: `/albums/${id}/edit`,
+    url: `/api/v1/albums/${id}`,
     data: payload,
     headers: {
       "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export const updateMusicRecords = (id, payload, token, toast) => (dispatch) => {
 export const deleteMusicRecords = (id, token, toast) => (dispatch) => {
   dispatch(deleteMusicRequest());
   return axios
-    .delete(`/albums/${id}`, {
+    .delete(`/api/v1/albums/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

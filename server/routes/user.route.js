@@ -5,7 +5,7 @@ const { emailPassRequiredValidator } = require("../middleware/emailPasswordRequi
 const { passwordValidator } = require("../middleware/passwordValidator.js");
 const userRouter = Router();
 
-userRouter.post("/api/users/signup",[emailPassRequiredValidator, emailValidator, passwordValidator], signupController);
-userRouter.post("api/users/login", [emailPassRequiredValidator, emailValidator, passwordValidator], loginController);
+userRouter.post("/users/signup",[emailPassRequiredValidator, emailValidator, passwordValidator], signupController);
+userRouter.post("/users/login", [emailPassRequiredValidator, emailValidator, passwordValidator], loginController);
 
 module.exports = { userRouter };

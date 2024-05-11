@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const express = require("express");
 const cors =require("cors");
 
@@ -10,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/", userRouter);
-app.use("/albums", albumRouter);
+app.use("/api/v1", userRouter);
+app.use("/api/v1", albumRouter);
 
 app.get("/", async (req, res) => {
   return res.send("Welcome to music app backend server home page")

@@ -38,7 +38,7 @@ function Login() {
 
     dispatch(loginRequest());
     axios
-      .post(`/login`, user)
+      .post(`/api/v1/users/login`, user)
       
       .then((res) => {
         // console.log(res.data);

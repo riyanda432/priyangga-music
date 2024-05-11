@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-
 /* ------------------ SignUp Logic----------------------------------- */
 
 const signupController = async (req, res) => {
@@ -79,7 +78,6 @@ const loginController = async (req, res) => {
         .send({ status: "error", message: "All Fields are Required" });
     }
   } catch (err) {
-    // console.log(err);
     return res.status(400).send({ status: "error", message: err.message });
   }
 }
