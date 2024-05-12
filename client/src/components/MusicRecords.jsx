@@ -67,8 +67,6 @@ const MusicRecords = ({ CurrentLocation }) => {
     };
   }, [location.search, musicRecords.length, page, limit]);
 
-
-
   return isLoading ? (
     <Loading />
   ) : isError ? (
@@ -175,7 +173,7 @@ const MusicRecords = ({ CurrentLocation }) => {
               </Text>
               <Text fontWeight={"bold"} noOfLines="1">
                 {" "}
-                Genere:{" "}
+                Genre:{" "}
                 <Text as="span" color={"green"}>
                   {" "}
                   {el.genre}{" "}

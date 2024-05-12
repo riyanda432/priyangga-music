@@ -1,6 +1,6 @@
 # priyangga-music
 
-A music application project for managing and streaming music. This project consists of a client built with React, a server using Express.js, and a MongoDB database.
+Priyangga Music is a comprehensive music management and streaming application built with React, Express.js, and MongoDB. This project aims to provide users with a seamless experience for managing their music collections and streaming their favorite tracks.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -12,6 +12,7 @@ A music application project for managing and streaming music. This project consi
     - [Client](#client-usage)
     - [Server](#server-usage)
 - [Deployment on Vercel](#deployment-on-vercel)
+- [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -99,5 +100,10 @@ Contributions to the project are welcome. To contribute, follow these steps:
     ```bash
     git push origin feature/new-feature
 6. Create a pull request to the main branch of the original repository.
+## DEMO
+*   [Client Demo](https://priyangga-music-client.vercel.app/) - Example demo URL for the client application.
+*   [Server Demo](https://priyangga-music-server.vercel.app) - Example demo URL for the server application.
 ## License
 This project is licensed under the [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/).
+
+

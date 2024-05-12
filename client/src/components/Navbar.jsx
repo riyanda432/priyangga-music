@@ -1,3 +1,5 @@
+import React from "react";
+import { useState } from "react";
 import {
   Box,
   Flex,
@@ -10,6 +12,7 @@ import {
   useDisclosure,
   useToast,
   Image,
+  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +20,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../redux/auth/action";
 import { notify } from "../utils/extraFunction";
 import logo from "../assets/logo.png";
+
 export default function Navbar() {
+  const [isHovered, setIsHovered] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
   const token = useSelector((store) => store.AuthReducer.token);
   const toast = useToast();
@@ -26,12 +31,13 @@ export default function Navbar() {
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
-    notify(toast, "Logout succesfully", "success");
+    notify(toast, "Logout successfully", "success");
     navigate("/");
   };
 
   return (
-    <Box position={"sticky"} top="0" left="0" zIndex={"5"}>
+    <Box display={{ base: isOpen ? "block" : "none", md: "block" }}
+    flexBasis={{ base: "100%", md: "auto" }} >
       <Flex
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
@@ -51,7 +57,7 @@ export default function Navbar() {
           <IconButton
             onClick={onToggle}
             icon={
-              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+              isOpen ? <CloseIcon w={5} h={5} /> : <HamburgerIcon w={5} h={5} />
             }
             variant={"ghost"}
             aria-label={"Toggle Navigation"}
@@ -66,8 +72,7 @@ export default function Navbar() {
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
           >
             <Link to="/">
-              {" "}
-              <Image w="70px" src={logo} alt="" />{" "}
+              <Image w="70px" src={logo} alt="Logo" />
             </Link>
           </Box>
         </Flex>
@@ -78,25 +83,42 @@ export default function Navbar() {
           direction={"row"}
           spacing={6}
         >
-          <Button
-            onClick={() => {
-              navigate("/albums/create");
-            }}
-            fontSize={"sm"}
-            size={{ base: "sm", sm: "md" }}
-            fontWeight={400}
-            bg={"blue"}
-            color={"white"}
+          <Box position="relative">
+        <Button
+          onClick={token ? () => navigate("/albums/create") : undefined}
+          disabled={!token}
+          fontSize={"sm"}
+          size={{ base: "sm", sm: "md" }}
+          fontWeight={400}
+          bg={"blue.400"}
+          _hover={{ bg: "blue.500" }}
+          color={"white"}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          Add Album
+        </Button>
+        {token || isHovered && (
+          <Text
+            fontSize="xs"
+            color="red.500"
+            position="absolute"
+            bottom="-20px"
+            left="50%"
+            transform="translateX(-50%)"
           >
-            AddAlbum
-          </Button>
+            You must log in before adding an album
+          </Text>
+        )}
+      </Box>
           {token ? (
             <Button
               onClick={handleLogout}
               fontSize={"sm"}
               size={{ base: "sm", sm: "md" }}
               fontWeight={400}
-              bg={"blue"}
+              bg={"blue.400"}
+              _hover={{ bg: "blue.500" }}
               color={"white"}
             >
               Logout
@@ -109,10 +131,12 @@ export default function Navbar() {
               fontSize={"sm"}
               size={{ base: "sm", sm: "md" }}
               fontWeight={400}
-              bg={"blue"}
+              bg={"blue.400"}
+              _hover={{ bg: "blue.500" }}
               color={"white"}
+              display="inline-flex"
             >
-              Login
+              Sign In
             </Button>
           )}
 
@@ -125,7 +149,8 @@ export default function Navbar() {
             fontSize={"sm"}
             fontWeight={600}
             color={"white"}
-            bg={"blue"}
+            bg={"blue.400"}
+            _hover={{ bg: "blue.500" }}
           >
             Sign Up
           </Button>

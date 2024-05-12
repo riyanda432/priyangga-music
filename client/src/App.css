@@ -1,4 +1,13 @@
 .App {
   text-align: center;
-  min-height: 120vh;
+  min-height: 100vh;
+}
+
+@media only screen and (min-width: 768px) {
+  .App {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 0;
+  }
 }
