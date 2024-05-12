@@ -12,6 +12,7 @@ Priyangga Music is a comprehensive music management and streaming application bu
     - [Client](#client-usage)
     - [Server](#server-usage)
 - [Deployment on Vercel](#deployment-on-vercel)
+- [API Documentation](#api-documentation)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -83,6 +84,8 @@ This project can be deployed to Vercel for production use. Follow these steps to
     vercel
 5. Follow the prompts to configure your deployment settings.
 6. Once deployed, you will receive a unique URL for your application.
+## API Documentation
+You can refer to this [link](https://web.postman.co/workspace/My-Workspace~cdb66b39-095b-412a-81bd-84000beff807/collection/34874061-429a9c04-f5d3-4d82-ad53-dd5bfdbff97b) for api documentation
 ## Contributing
 Contributions to the project are welcome. To contribute, follow these steps:
 1. Fork the repository.
