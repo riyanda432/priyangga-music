@@ -7,8 +7,7 @@ export function loadData(key){
     }
 }
 
-// function for saving the data 
-export function saveData(key,data) {
+export function saveData(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 };
 

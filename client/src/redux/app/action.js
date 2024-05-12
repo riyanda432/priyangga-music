@@ -63,32 +63,30 @@ const deleteMusicFailure = (payload) => {
   return { type: DELETE_MUSIC_RECORDS_FAILURE, payload };
 };
 
-export const getMusicRecords = (params, token, toast) => (dispatch) => {
+export const getMusicRecords = (params, token, toast) => async (dispatch) => {
   dispatch(getMusicRequest());
-  return axios({
-    method: "get",
-    url: `/api/v1/albums`,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    params
-  })
-    .then((res) => {
-      dispatch(getMusicSuccess(res.data));
-      notify(toast, "Album Fetched successfully", "success");
-    })
-    .catch((err) => {
-      dispatch(getMusicFailure(err));
-      notify(toast, err.response.data.message, "error");
+  try {
+    const response = await axios.get(`/api/v1/albums`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      params
     });
+    dispatch(getMusicSuccess(response.data.data));
+    notify(toast, "Album Fetched successfully", "success");
+  } catch (error) {
+    dispatch(getMusicFailure(error));
+    const errorMessage = error.response ? error.response.data.data.message : "An error occurred";
+    notify(toast, errorMessage, "error");
+  }
 };
 
 export const addMusicRecords = (payload, token, toast) => (dispatch) => {
   dispatch(addMusicRequest());
   return axios({
     method: "post",
-    url: `/api/v1/albums/create`,
+    url: `/api/v1/albums`,
     data: payload,
     headers: {
       "Content-Type": "application/json",
@@ -96,8 +94,8 @@ export const addMusicRecords = (payload, token, toast) => (dispatch) => {
     },
   })
     .then((res) => {
-      dispatch(addMusicSuccess(res.data));
-      notify(toast, "Album added successfully", "success");
+      dispatch(addMusicSuccess(res.data.data));
+      notify(toast, res.data.message, "success");
     })
     .catch((err) => {
       notify(toast, err.response.data.message, "error");
@@ -105,42 +103,40 @@ export const addMusicRecords = (payload, token, toast) => (dispatch) => {
     });
 };
 
-export const updateMusicRecords = (id, payload, token, toast) => (dispatch) => {
-  dispatch(updateMusicRequest);
-  return axios({
-    method: "patch",
-    url: `/api/v1/albums/${id}`,
-    data: payload,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      dispatch(updateMusicSuccess);
-      notify(toast, res.data.message, "success");
-    })
-    .catch((err) => {
-      dispatch(updateMusicFailure);
-      notify(toast, err.response.data.message, "error");
+export const updateMusicRecords = (id, payload, token, toast) => async (dispatch) => {
+  try {
+    dispatch(updateMusicRequest());
+    const response = await axios.patch(`/api/v1/albums/${id}`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
     });
+
+    dispatch(updateMusicSuccess(response.data.data));
+    notify(toast, response.data.message, "success");
+  } catch (error) {
+    dispatch(updateMusicFailure());
+    const errorMessage = error.response ? error.response.data.message : "An error occurred";
+    notify(toast, errorMessage, "error");
+  }
 };
 
-export const deleteMusicRecords = (id, token, toast) => (dispatch) => {
-  dispatch(deleteMusicRequest());
-  return axios
-    .delete(`/api/v1/albums/${id}`, {
+export const deleteMusicRecords = (id, token, toast) => async (dispatch) => {
+  try {
+    dispatch(deleteMusicRequest());
+    const response = await axios.delete(`/api/v1/albums/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-    .then((res) => {
-      dispatch(deleteMusicSuccess());
-      notify(toast, res.data.message, "success");
-    })
-    .catch((err) => {
-      notify(toast, err.response.data.message, "error");
-      dispatch(deleteMusicFailure(err));
     });
+    dispatch(deleteMusicSuccess());
+    notify(toast, response.data.message, "success");
+  } catch (error) {
+    dispatch(deleteMusicFailure());
+    const errorMessage = error.response ? error.response.data.message : "An error occurred";
+    notify(toast, errorMessage, "error");
+  }
 };
+

@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import {
   Box,
   Flex,
@@ -12,7 +11,6 @@ import {
   useDisclosure,
   useToast,
   Image,
-  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,7 +20,6 @@ import { notify } from "../utils/extraFunction";
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
-  const [isHovered, setIsHovered] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
   const token = useSelector((store) => store.AuthReducer.token);
   const toast = useToast();
@@ -32,7 +29,7 @@ export default function Navbar() {
   const handleLogout = () => {
     dispatch(logoutSuccess());
     notify(toast, "Logout successfully", "success");
-    navigate("/");
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -93,23 +90,9 @@ export default function Navbar() {
           bg={"blue.400"}
           _hover={{ bg: "blue.500" }}
           color={"white"}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
           Add Album
         </Button>
-        {token || isHovered && (
-          <Text
-            fontSize="xs"
-            color="red.500"
-            position="absolute"
-            bottom="-20px"
-            left="50%"
-            transform="translateX(-50%)"
-          >
-            You must log in before adding an album
-          </Text>
-        )}
       </Box>
           {token ? (
             <Button

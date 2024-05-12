@@ -47,7 +47,6 @@ const MusicRecords = ({ CurrentLocation }) => {
       fetchData ||
       (musicRecords.length === 0 && CurrentLocation === "homePage")
     ) {
-
       const sortBy = searchParams.get("sortBy");
       const queryParams = {
         params: {

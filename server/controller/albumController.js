@@ -6,35 +6,30 @@ const getAllAlbums = async (req, res) => {
     page = +page || 1;
     limit = +limit || 6;
     const skip = (page - 1) * limit;
-    let order;
+    let sort = { updatedAt: -1 };
+
     if (_order) {
-      order = _order === "asc" ? 1 : -1;
+      const order = _order === "asc" ? 1 : -1;
+      sort = { year: order, ...sort };
     }
-    if (rest.genre || _order) {
-      const totalAlbum = await AlbumModel.find(rest).count();
-      const totalPages = Math.ceil(totalAlbum / limit);
-      const result = await AlbumModel.find(rest)
-        .skip(skip)
-        .limit(limit)
-        .sort({ year: order, updatedAt: -1 });
 
-      return res.status(200).send({ result, totalPages });
-    } else {
-      const totalAlbum = await AlbumModel.find({}).count();
-      const totalPages = Math.ceil(totalAlbum / limit);
-      const result = await AlbumModel.find({}).skip(skip)
-        .limit(limit).sort({ updatedAt: -1 });
-
-      if (result.length > 0) {
-        return res.status(200).send({ result, totalPages });
-      } else {
-        return res
-          .status(400)
-          .send({ message: "please create a album first", status: "error" });
-      }
+    let query = rest;
+    if (rest.genre) {
+      query = { ...query, genre: rest.genre };
     }
+
+    const [totalAlbum, result] = await Promise.all([
+      AlbumModel.countDocuments(query),
+      AlbumModel.find(query).skip(skip).limit(limit).sort(sort)
+    ])
+    const totalPages = Math.ceil(totalAlbum / limit);
+    if(!result.length) {
+      return res.status(404).json({ error: { message: "No albums found", status: "error" } });
+    }
+
+    return res.status(200).json({ data: { result, totalPages } });
   } catch (error) {
-    return res.status(500).json({ message: err.message, status: "error" });
+    return res.status(500).json({ error: { message: error.message, status: "error" } });
   }
 };
 
@@ -52,38 +47,48 @@ const addAlbum = async (req, res) => {
   try {
     const newAlbum = new AlbumModel(req.body);
     await newAlbum.save();
-    return res.status(201).send(newAlbum);
+    return res.status(201).json({ data: newAlbum, message: "Album added successfully"});
   } catch (err) {
-    return res.status(500).json({ message: err.message, status: "error" });
+    return res.status(500).json({ error: { message: err.message } });
   }
 };
 
 const updateAlbum = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { userId } = req.body;
+    const { id } = req.params;
+    const { userId, ...albumData } = req.body;
+    const [ foundAlbum, updatedAlbum ] = await Promise.all([
+      AlbumModel.findById(id),
+      AlbumModel.findByIdAndUpdate(id, albumData, { new: true })
+    ])
 
-    const foundAlbum = await AlbumModel.findById(id);
-    if (foundAlbum.userId === userId) {
-      const updatedAlbum = await AlbumModel.findByIdAndUpdate(
-        { _id: id },
-        req.body,
-        { new: true }
-      );
-      if (updatedAlbum) {
-        return res
-          .status(201)
-          .send({ status: "success", message: " updated successfully" });
-      }
-    } else {
-      return res.status(400).send({
-        status: "error",
-        message: "you are not authorize to update this album",
+    if (!updatedAlbum) {
+      return res.status(500).json({
+        error: {
+          status: "error",
+          message:  "Failed to update album",
+        }
       });
     }
+   
+    if (!foundAlbum) {
+      return res.status(404).json({ status: "error", message: "Album not found" });
+    }
+
+    if (foundAlbum.userId !== userId) {
+      return res.status(403).json(
+        {
+          error: {
+            status: "error",
+            message: "You are not authorized to update this album",
+          }
+        }
+      );
+    }
+
+    return res.status(200).json({ status: "success", message: "Album updated successfully", data: updatedAlbum });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: err.message, status: "error" });
+    return res.status(500).json({ status: "error", message: err.message });
   }
 };
 
@@ -91,25 +96,30 @@ const deleteAlbum = async (req, res) => {
   try {
     const id = req.params.id;
     const { userId } = req.body;
+    const [ foundAlbum, deleteAlbum ] = await Promise.all([
+      AlbumModel.findById(id),
+      AlbumModel.findByIdAndDelete(id)
+    ])
 
-    const foundAlbum = await AlbumModel.findById(id);
-
-    if (foundAlbum.userId === userId) {
-      const deleteAlbum = await AlbumModel.findByIdAndDelete(id);
-
-      if (deleteAlbum) {
-        return res
-          .status(200)
-          .send({ status: "success", message: "Album deleted successfully" });
-      }
-    } else {
+    if (!deleteAlbum) {
+      return res
+        .status(400)
+        .send({ error: { message: "Album not found !" } });
+    }
+    
+    if (foundAlbum.userId !== userId) {
       return res.status(400).send({
         status: "error",
-        message: "you are not authorize to delete this album",
+        message: "you are not authorize to delete this album"
       });
     }
+
+    return res
+      .status(200)
+      .send({ data: { status: "success" }, message: "Album Deleted Successfully"});
+
   } catch (err) {
-    return res.status(500).json({ message: err.message, status: "error" });
+    return res.status(500).json({ error: { message: err.message, status: "error" } });
   }
 };
 

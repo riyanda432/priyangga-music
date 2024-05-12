@@ -33,25 +33,26 @@ function Login() {
     setUser({ ...user, [name]: value });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
     dispatch(loginRequest());
-    axios
-      .post(`/api/v1/users/login`, user)
-      
-      .then((res) => {
-        if (res.data.token) {
-          let payload = res.data;
-          dispatch(loginSuccess(payload));
-          notify(toast, res.data.message, "success");
-          navigate(comingFrom, { replace: true });
+    try {
+      const response = await axios.post(`/api/v1/users/login`, user, {
+        headers: {
+          "Content-Type": "application/json"
         }
-      })
-      .catch((err) => {
-        dispatch(loginFailure());
-        notify(toast, err.response.data.message, "error");
       });
+      const { data } = response;
+      if (data.data.token) {
+        dispatch(loginSuccess(data.data));
+        notify(toast, data.data.message, "success");
+        navigate(comingFrom, { replace: true });
+      }
+    } catch (error) {
+      dispatch(loginFailure());
+      const errorMessage = error.response ? error.response.data.message : "An error occurred";
+      notify(toast, errorMessage, "error");
+    }
   };
 
   return (
