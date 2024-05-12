@@ -77,7 +77,7 @@ export const getMusicRecords = (params, token, toast) => async (dispatch) => {
     notify(toast, "Album Fetched successfully", "success");
   } catch (error) {
     dispatch(getMusicFailure(error));
-    const errorMessage = error.response ? error.response.data.data.message : "An error occurred";
+    const errorMessage = error.response ? error.response.data.error.message : "An error occurred";
     notify(toast, errorMessage, "error");
   }
 };
